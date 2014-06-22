@@ -1,0 +1,22 @@
+{
+    "name": "michaldudek/genry-docs",
+    "description": "PHP documentation generator that user Twig for Genry.",
+    "keywords": ["generator", "documentation", "twig", "html", "phpdoc", "docs"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Michał Dudek",
+            "email": "michal@michaldudek.pl"
+        }
+    ],
+    "require": {
+        "michaldudek/genry": "dev-master",
+        "sami/sami": "1.4.*@dev"
+    },
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-0": {
+            "MD\\GenryDocsModule": "src/"
+        }
+    }
+}
