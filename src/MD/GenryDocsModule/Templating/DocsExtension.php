@@ -2,6 +2,7 @@
 namespace MD\GenryDocsModule\Templating;
 
 use Twig_Extension;
+use Twig_SimpleFilter;
 use Twig_SimpleFunction;
 
 use MD\Genry\Page;
@@ -16,9 +17,12 @@ class DocsExtension extends Twig_Extension
 
     protected $router;
 
-    public function __construct(Project $project, Router $router) {
+    protected $namespace;
+
+    public function __construct(Project $project, Router $router, $namespace = '') {
         $this->project = $project;
         $this->router = $router;
+        $this->namespace = trim($namespace, NS);
     }
 
     public function getGlobals() {
@@ -27,15 +31,16 @@ class DocsExtension extends Twig_Extension
         );
     }
 
-    /**
-     * Returns Twig functions registered by this extension.
-     * 
-     * @return array
-     */
     public function getFunctions() {
         return array(
             new Twig_SimpleFunction('link_namespace', array($this, 'linkNamespace'), array('needs_context' => true)),
             new Twig_SimpleFunction('link_class', array($this, 'linkClass'), array('needs_context' => true))
+        );
+    }
+
+    public function getFilters() {
+        return array(
+            new Twig_SimpleFilter('strip_namespace', array($this, 'stripNamespace'))
         );
     }
 
@@ -53,6 +58,26 @@ class DocsExtension extends Twig_Extension
         }
 
         return $this->router->generateClassLink($class, $context['_genry_page']);
+    }
+
+    public function stripNamespace($class) {
+        // ensure string
+        $class = (string)$class;
+        $rawClass = trim($class, NS);
+
+        // if namespace not defined then just return the full class
+        if (empty($this->namespace)) {
+            return $class;
+        }
+
+        // if class not in namespace then return the class
+        if (stripos($rawClass, $this->namespace) !== 0) {
+            return $class;
+        }
+
+        $shortClass = mb_substr($rawClass, mb_strlen($this->namespace));
+        $shortClass = trim($shortClass, NS);
+        return $shortClass;
     }
 
     /**

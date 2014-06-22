@@ -58,7 +58,8 @@ class GenryDocsModule extends AbstractModule
         $this->container->set('docs.twig_extension', function($c) {
             return new DocsExtension(
                 $c->get('docs.project'),
-                $c->get('docs.router')
+                $c->get('docs.router'),
+                $c->get('config')->get('docs.namespace', '')
             );
         });
     }
