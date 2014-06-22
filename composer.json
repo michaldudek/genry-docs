@@ -1,6 +1,6 @@
 {
     "name": "michaldudek/genry-docs",
-    "description": "PHP documentation generator that user Twig for Genry.",
+    "description": "PHP documentation generator for Genry that uses Twig.",
     "keywords": ["generator", "documentation", "twig", "html", "phpdoc", "docs"],
     "license": "MIT",
     "authors": [
