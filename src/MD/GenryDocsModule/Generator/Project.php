@@ -50,6 +50,11 @@ class Project
         return $this->project->getProjectInterfaces();
     }
 
+    public function getNamespaceAllClasses($namespace) {
+        $this->parse();
+        return $this->project->getNamespaceAllClasses($namespace);
+    }
+
     public function getNamespaceClasses($namespace) {
         $this->parse();
         return $this->project->getNamespaceClasses($namespace);
