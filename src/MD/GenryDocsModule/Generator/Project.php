@@ -109,4 +109,13 @@ class Project
         return $this->treeData;
     }
 
+    public function isPhpType($type) {
+        return SamiProject::isPhpTypeHint($type);
+    }
+
+    public function isProjectClass($class) {
+        $projectClasses = $this->getClasses();
+        return isset($projectClasses[$class]);
+    }
+
 }
