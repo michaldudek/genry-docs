@@ -114,6 +114,10 @@ class Project
     }
 
     public function isProjectClass($class) {
+        $class = (string)$class;
+        if (empty($class)) {
+            return false;
+        }
         $projectClasses = $this->getClasses();
         return isset($projectClasses[$class]);
     }
