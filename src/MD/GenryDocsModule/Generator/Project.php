@@ -5,6 +5,8 @@ use Sami\Project as SamiProject;
 use Sami\Indexer;
 use Sami\Tree;
 
+use MD\Foundation\Debug\Debugger;
+
 class Project
 {
 
@@ -107,6 +109,11 @@ class Project
         $this->parse();
         $this->treeData = $this->tree->getTree($this->project);
         return $this->treeData;
+    }
+
+    public function getClassParents($class) {
+        $class = (string)$class;
+        return Debugger::getObjectAncestors($class);
     }
 
     public function isPhpType($type) {
