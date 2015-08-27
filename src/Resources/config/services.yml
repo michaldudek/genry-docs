@@ -1,0 +1,43 @@
+parameters:
+    docs.source: ~
+    docs.cache_dir: %cache_dir%/sami/cache
+    docs.build_dir: %cache_dir%/sami/build
+
+services:
+    
+    docs.sami:
+        class: Sami\Sami
+        arguments:
+            - %docs.source%
+            - build_dir: %docs.build_dir%
+              cache_dir: %docs.cache_dir%
+              default_opened_level: 2
+
+    docs.project:
+        class: Genry\Docs\Generator\Project
+        arguments:
+            - @sami
+
+    docs.generator:
+        class: Genry\Docs\Generator\Generator
+        arguments:
+            - @genry
+            - @docs.project
+            - %docs.templates%
+            - %docs.output_dir%
+            - %docs.verbose%
+
+    docs.router:
+        class: Genry\Docs\Generator\Router
+        arguments:
+            - @genry.router
+            - %docs.output_dir%
+
+    docs.twig_extension:
+        class: Genry\Docs\Templating\DocsExtension
+        arguments:
+            - @docs.project
+            - @docs.router
+            - %docs.namespace%
+        notify:
+            - ['@twig', 'addExtension', ['@']]

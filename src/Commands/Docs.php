@@ -1,15 +1,35 @@
 <?php
-namespace MD\GenryDocsModule\Commands;
+namespace Genry\Docs\Commands;
 
 use Splot\Framework\Console\AbstractCommand;
 
-class Docs extends AbstractCommand 
+/**
+ * Command to generate docs.
+ *
+ * @author Michał Pałys-Dudek <michal@michaldudek.pl>
+ */
+class Docs extends AbstractCommand
 {
 
+    /**
+     * Command name.
+     *
+     * @var string
+     */
     protected static $name = 'docs';
+
+    /**
+     * Command description.
+     *
+     * @var string
+     */
     protected static $description = 'Generate documentation based on config in .genry.yml';
 
-    public function execute() {
+    /**
+     * Executes the command.
+     */
+    public function execute()
+    {
         $config = $this->get('config');
         $source = $config->get('docs.source');
         $this->writeln('Generating documentation for <info>'. $source .'</info>...');
@@ -27,7 +47,7 @@ class Docs extends AbstractCommand
 
         $templates = FilesystemUtils::glob($templatesDir .'{,**/}*.html.twig', GLOB_BRACE);
 
-        foreach($templates as $template) {
+        foreach ($templates as $template) {
             // exclude if a partial template, ie. ends with ".inc.html.twig"
             if (preg_match('/\.inc\.html\.twig$/i', $template)) {
                 continue;
@@ -37,11 +57,14 @@ class Docs extends AbstractCommand
         }
 
         $output = $this;
-        $genry->processQueue(function(Page $page) use ($output, $genry) {
-            $output->writeln('Generated <info>'. $page->getOutputName() .'</info> from <comment>'. $page->getTemplateName() .'</comment>...');
+        $genry->processQueue(function (Page $page) use ($output, $genry) {
+            $output->writeln(sprintf(
+                'Generated <info>%s</info> from <comment>%s</comment>...',
+                $page->getOutputName(),
+                $page->getTemplateName()
+            ));
         });
 
         $this->writeln('Done.');
     }
-
 }
